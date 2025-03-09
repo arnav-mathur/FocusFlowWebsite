@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Flow - AI-Powered Accountability Partner</title>
+    <style>
+        :root {
+            --primary-dark: #0a192f;
+            --primary: #112240;
+            --primary-light: #1d3557;
+            --accent-blue: #2557D6;
+            --accent-purple: #8A4FFF;
+            --text: #e6f1ff;
+            --text-secondary: #8892b0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+        
+        header {
+            background-color: rgba(17, 34, 64, 0.95);
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 50px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent-purple);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(37, 87, 214, 0.25);
+        }
+        
+        .btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            transform: translateY(100%);
+            transition: transform 0.4s;
+        }
+        
+        .btn:hover:after {
+            transform: translateY(0);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(138, 79, 255, 0.4);
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            background: linear-gradient(135deg, var(--primary-dark), #1e3c72);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero:before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(138, 79, 255, 0.1) 0%, rgba(37, 87, 214, 0.05) 35%, rgba(10, 25, 47, 0) 70%);
+            top: -50%;
+            left: -50%;
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-text {
+            flex: 1;
+        }
+        
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .hero-logo {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.4));
+            transform: translateZ(50px);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateZ(50px) translateY(0); }
+            50% { transform: translateZ(50px) translateY(-15px); }
+        }
+        
+        .features {
+            padding: 6rem 0;
+            background-color: var(--primary);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            bottom: -10px;
+            left: 25%;
+            border-radius: 3px;
+        }
+        
+        .section-title p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 1.5rem auto 0;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: var(--primary-light);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(37, 87, 214, 0.05), rgba(138, 79, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .feature-card:hover:before {
+            opacity: 1;
+        }
+        
+        .feature-icon-container {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            box-shadow: 0 10px 20px rgba(37, 87, 214, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-icon-container:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            top: 0;
+            left: 0;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: white;
+            z-index: 1;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .feature-card p {
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .how-it-works {
+            padding: 6rem 0;
+            background-color: var(--primary-dark);
+            position: relative;
+        }
+        
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .steps:before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple));
+            border-radius: 3px;
+        }
+        
+        .step {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            position: relative;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 10px 20px rgba(37, 87, 214, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-content {
+            background-color: var(--primary-light);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            flex: 1;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .step:hover .step-content {
+            transform: translateX(5px);
+        }
+        
+        .step-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-content p {
+            color: var(--text-secondary);
+        }
+        
+        .app-features {
+            padding: 6rem 0;
+            background-color: var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-features:before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(37, 87, 214, 0.1) 0%, rgba(10, 25, 47, 0) 70%);
+            top: -150px;
+            left: -150px;
+        }
+        
+        .app-features:after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(138, 79, 255, 0.1) 0%, rgba(10, 25, 47, 0) 70%);
+            bottom: -150px;
+            right: -150px;
+        }
+        
+        .infinity-logo {
+            width: 180px;
+            margin: 0 auto 2rem;
+            display: block;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+            animation: pulse 6s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .app-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .app-feature-card {
+            background-color: var(--primary-light);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .app-feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 30%;
+            background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple));
+            border-radius: 0 0 3px 3px;
+            transition: height 0.3s;
+        }
+        
+        .app-feature-card:hover:before {
+            height: 60%;
+        }
+        
+        .app-feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            margin-right: 1rem;
+            box-shadow: 0 8px 15px rgba(37, 87, 214, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .icon-container:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            top: 0;
+            left: 0;
+            border-radius: 0 0 50% 50%;
+        }
+        
+        .app-feature-card p {
+            color: var(--text-secondary);
+            padding-left: 60px;
+        }
+        
+        .waitlist {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--primary-dark), #1e3c72);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .waitlist:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232557D6' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        
+        .waitlist-form {
+            max-width: 500px;
+            margin: 3rem auto 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background-color: rgba(10, 25, 47, 0.5);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 15px rgba(138, 79, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            background-color: var(--primary-dark);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin: 0 auto;
+            }
+            
+            .step-content {
+                width: 100%;
+            }
+            
+            .app-feature-card p {
+                padding-left: 0;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .steps:before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <img src="/api/placeholder/150/50" alt="Focus Flow Logo" class="logo">
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#app-features">App Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#waitlist">Join Waitlist</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Your AI Accountability Partner</h1>
+                    <p>Focus Flow intelligently schedules your tasks around your availability and sleep patterns, with smart reminders to ensure you never miss important deadlines.</p>
+                    <a href="#waitlist" class="btn">Join the Waitlist</a>
+                </div>
+                <div class="hero-image">
+                    <img src="/api/placeholder/400/200" alt="Focus Flow Logo" class="hero-logo">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Focus Flow Works</h2>
+                <p>Our AI-powered approach to productivity combines smart technology with proven psychological principles.</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-container">
+                        <div class="feature-icon">🤖</div>
+                    </div>
+                    <h3>AI Accountability Partner</h3>
+                    <p>Your personal AI assistant schedules your tasks intelligently and keeps you on track with strategic reminders.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-container">
+                        <div class="feature-icon">📆</div>
+                    </div>
+                    <h3>Calendar Integration</h3>
+                    <p>Seamlessly integrates with Google Calendar, Apple Calendar, and other popular calendar apps.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-container">
+                        <div class="feature-icon">🎮</div>
+                    </div>
+                    <h3>Gamified Productivity</h3>
+                    <p>Complete challenges, maintain streaks, and compete on leaderboards with friends and family.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="app-features" id="app-features">
+        <div class="container">
+            <div class="section-title">
+                <img src="/api/placeholder/150/150" alt="Infinity Logo" class="infinity-logo">
+                <h2>Powerful Features</h2>
+                <p>Focus Flow is packed with innovative tools designed to boost your productivity.</p>
+            </div>
+            <div class="app-feature-grid">
+                <div class="app-feature-card">
+                    <h3>
+                        <div class="icon-container">🗣️</div>
+                        Voice-to-Task
+                    </h3>
+                    <p>Simply speak your tasks aloud and our AI will schedule them intelligently based on your availability.</p>
+                </div>
+                <div class="app-feature-card">
+                    <h3>
+                        <div class="icon-container">⏰</div>
+                        Smart Reminders
+                    </h3>
+                    <p>Strategically timed notifications ensure you never miss important tasks or deadlines.</p>
+                </div>
+                <div class="app-feature-card">
+                    <h3>
+                        <div class="icon-container">💤</div>
+                        Sleep-Aware Scheduling
+                    </h3>
+                    <p>Our app respects your sleep schedule and plans tasks around your optimal productivity hours.</p>
+                </div>
+                <div class="app-feature-card">
+                    <h3>
+                        <div class="icon-container">📱</div>
+                        WhatsApp Integration
+                    </h3>
+                    <p>Access your task manager directly through WhatsApp for convenient on-the-go productivity.</p>
+                </div>
+                <div class="app-feature-card">
+                    <h3>
+                        <div class="icon-container">📸</div>
+                        Task Verification
+                    </h3>
+                    <p>Verify task completion through AI-analyzed photos, geotagging, or friend confirmation.</p>
+                </div>
+                <div class="app-feature-card">
+                    <h3>
+                        <div class="icon-container">🏆</div>
+                        Challenges & Streaks
+                    </h3>
+                    <p>Stay motivated with personal challenges, daily streaks, and friendly competition.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How Focus Flow Works</h2>
+                <p>A simple process that delivers powerful results.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Add Tasks with Voice or Text</h3>
+                        <p>Speak or type your tasks, and our AI will schedule them intelligently based on your calendar and availability.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Receive Smart Reminders</h3>
+                        <p>Get strategically timed notifications that maximize your productivity and ensure task completion.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Complete & Verify Tasks</h3>
+                        <p>Mark tasks as complete with photo verification, geotagging, or have friends confirm your accomplishments.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Track Progress & Compete</h3>
+                        <p>Maintain streaks, join challenges, and climb leaderboards to stay motivated and accountable.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="waitlist" id="waitlist">
+        <div class="container">
+            <div class="section-title">
+                <h2>Be Among the First to Experience Focus Flow</h2>
+                <p>Join our waitlist to get early access and exclusive benefits when we launch.</p>
+            </div>
+            <div class="waitlist-form">
+                <form id="waitlist-form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Your Email" required>
+                    </div>
+                    <button type="submit" class="btn">Join the Waitlist</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Focus Flow. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.getElementById('waitlist-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Thanks for joining our waitlist! We\'ll contact you soon with more information.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
